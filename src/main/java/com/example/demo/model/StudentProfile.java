@@ -9,17 +9,18 @@ public class StudentProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String email;
+    @OneToOne
+    private UserAccount userAccount;
 
-    public StudentProfile() {}
+    private String name;
+    private int age;
+    private String gender;
+    private String roomTypePreference;
 
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public UserAccount getUserAccount() { return userAccount; }
+    public int getAge() { return age; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setUserAccount(UserAccount userAccount) { this.userAccount = userAccount; }
+    public void setAge(int age) { this.age = age; }
 }
