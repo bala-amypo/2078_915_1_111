@@ -1,40 +1,17 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
-import com.example.demo.exception.*;
-import com.example.demo.dto.*;
-import com.example.demo.service.*;
+import com.example.demo.dto.StudentProfileDto;
+import com.example.demo.model.StudentProfile;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-@Service
-public class StudentProfileServiceImpl implements StudentProfileService {
+public interface StudentProfileService {
 
-    private final StudentProfileRepository repo;
-    private final UserAccountRepository userRepo;
+    StudentProfile create(StudentProfileDto dto, Long userId);
 
-    public StudentProfileServiceImpl(StudentProfileRepository repo, UserAccountRepository userRepo) {
-        this.repo = repo;
-        this.userRepo = userRepo;
-    }
+    StudentProfile update(Long id, StudentProfileDto dto);
 
-    public StudentProfile create(StudentProfileDto dto, Long userId) {
-        if (dto.getAge() <= 0)
-            throw new IllegalArgumentException("age must be > 0");
+    StudentProfile get(Long id);
 
-        UserAccount user = userRepo.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        StudentProfile s = new StudentProfile();
-        s.setAge(dto.getAge());
-        s.setUserAccount(user);
-
-        return repo.save(s);
-    }
-
-    public StudentProfile get(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
-    }
+    List<StudentProfile> getAll();
 }
