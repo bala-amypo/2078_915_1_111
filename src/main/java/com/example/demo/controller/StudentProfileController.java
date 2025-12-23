@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.StudentProfileDto;
 import com.example.demo.model.StudentProfile;
 import com.example.demo.service.StudentProfileService;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,26 +19,24 @@ public class StudentProfileController {
     }
 
     @PostMapping("/{userId}")
-    public StudentProfile createProfile(
-            @RequestBody StudentProfileDto dto,
-            @PathVariable Long userId) {
+    public StudentProfile create(@RequestBody StudentProfileDto dto,
+                                 @PathVariable Long userId) {
         return studentService.create(dto, userId);
     }
 
     @PutMapping("/{id}")
-    public StudentProfile updateProfile(
-            @PathVariable Long id,
-            @RequestBody StudentProfileDto dto) {
+    public StudentProfile update(@PathVariable Long id,
+                                 @RequestBody StudentProfileDto dto) {
         return studentService.update(id, dto);
     }
 
     @GetMapping("/{id}")
-    public StudentProfile getProfile(@PathVariable Long id) {
+    public StudentProfile get(@PathVariable Long id) {
         return studentService.get(id);
     }
 
     @GetMapping
-    public List<StudentProfile> getAllProfiles() {
+    public List<StudentProfile> getAll() {
         return studentService.getAll();
     }
 }

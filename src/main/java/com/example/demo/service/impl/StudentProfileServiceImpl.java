@@ -7,6 +7,7 @@ import com.example.demo.model.UserAccount;
 import com.example.demo.repository.StudentProfileRepository;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.StudentProfileService;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,6 @@ public class StudentProfileServiceImpl implements StudentProfileService {
 
     @Override
     public StudentProfile create(StudentProfileDto dto, Long userId) {
-
         if (dto.getAge() <= 0) {
             throw new IllegalArgumentException("age must be > 0");
         }
@@ -42,7 +42,6 @@ public class StudentProfileServiceImpl implements StudentProfileService {
 
     @Override
     public StudentProfile update(Long id, StudentProfileDto dto) {
-
         StudentProfile profile = studentRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
 
