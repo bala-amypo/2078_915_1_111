@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.StudentProfileDto;
 import com.example.demo.model.StudentProfile;
 import com.example.demo.service.StudentProfileService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,36 +11,33 @@ import java.util.List;
 @RequestMapping("/api/students")
 public class StudentProfileController {
 
-    private final StudentProfileService studentProfileService;
+    private final StudentProfileService studentService;
 
-    public StudentProfileController(StudentProfileService studentProfileService) {
-        this.studentProfileService = studentProfileService;
+    public StudentProfileController(StudentProfileService studentService) {
+        this.studentService = studentService;
     }
 
-    // Create a new student profile
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public StudentProfile createStudentProfile(@RequestBody StudentProfile profile) {
-        return studentProfileService.create(profile);
+    @PostMapping("/{userId}")
+    public StudentProfile createProfile(
+            @RequestBody StudentProfileDto dto,
+            @PathVariable Long userId) {
+        return studentService.create(dto, userId);
     }
 
-    // Get student profile by ID
-    @GetMapping("/{id}")
-    public StudentProfile getStudentProfile(@PathVariable Long id) {
-        return studentProfileService.getProfile(id);
-    }
-
-    // Get all student profiles
-    @GetMapping
-    public List<StudentProfile> getAllStudentProfiles() {
-        return studentProfileService.getAllProfiles();
-    }
-
-    // Update student profile
     @PutMapping("/{id}")
-    public StudentProfile updateStudentProfile(
+    public StudentProfile updateProfile(
             @PathVariable Long id,
-            @RequestBody StudentProfile profile) {
-        return studentProfileService.updateProfile(id, profile);
+            @RequestBody StudentProfileDto dto) {
+        return studentService.update(id, dto);
+    }
+
+    @GetMapping("/{id}")
+    public StudentProfile getProfile(@PathVariable Long id) {
+        return studentService.get(id);
+    }
+
+    @GetMapping
+    public List<StudentProfile> getAllProfiles() {
+        return studentService.getAll();
     }
 }
