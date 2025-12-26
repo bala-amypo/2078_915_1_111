@@ -45,6 +45,10 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         StudentProfile profile = studentRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
 
+        if (dto.getAge() <= 0) {
+            throw new IllegalArgumentException("age must be > 0");
+        }
+
         profile.setAge(dto.getAge());
         return studentRepo.save(profile);
     }
