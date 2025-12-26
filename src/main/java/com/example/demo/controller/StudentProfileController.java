@@ -24,6 +24,17 @@ public class StudentProfileController {
         return studentService.create(dto, userId);
     }
 
+    @PutMapping("/{id}")
+    public StudentProfile update(@PathVariable Long id,
+                                 @RequestBody StudentProfileDto dto) {
+        return studentService.update(id, dto);
+    }
+
+    @GetMapping("/{id}")
+    public StudentProfile get(@PathVariable Long id) {
+        return studentService.get(id);
+    }
+
     @GetMapping
     public List<StudentProfile> getAll() {
         return studentService.getAll();
