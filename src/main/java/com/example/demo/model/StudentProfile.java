@@ -6,21 +6,26 @@ import jakarta.persistence.*;
 public class StudentProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    @OneToOne
-    private UserAccount userAccount;
-
-    private String name;
-    private int age;
-    private String gender;
-    private String roomTypePreference;
+    private String studentId;
+    private String email;
+    private String fullName;
+    private Boolean active = true;
 
     public Long getId() { return id; }
-    public UserAccount getUserAccount() { return userAccount; }
-    public int getAge() { return age; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setUserAccount(UserAccount userAccount) { this.userAccount = userAccount; }
-    public void setAge(int age) { this.age = age; }
+    public String getStudentId() { return studentId; }
+    public void setStudentId(String studentId) { this.studentId = studentId; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
 }
