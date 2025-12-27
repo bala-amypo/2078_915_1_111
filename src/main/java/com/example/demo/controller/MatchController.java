@@ -10,26 +10,20 @@ import java.util.List;
 @RequestMapping("/api/matches")
 public class MatchController {
 
-    private final MatchService matchService;
+    private final MatchService service;
 
-    public MatchController(MatchService matchService) {
-        this.matchService = matchService;
+    public MatchController(MatchService service) {
+        this.service = service;
     }
 
     @PostMapping("/compute")
-    public MatchResult computeMatch(
-            @RequestParam Long studentAId,
-            @RequestParam Long studentBId) {
-        return matchService.compute(studentAId, studentBId);
+    public MatchResult compute(@RequestParam Long a,
+                               @RequestParam Long b) {
+        return service.computeMatch(a, b);
     }
 
-    @GetMapping("/student/{studentId}")
-    public List<MatchResult> getMatchesForStudent(@PathVariable Long studentId) {
-        return matchService.getForStudent(studentId);
-    }
-
-    @GetMapping("/{id}")
-    public MatchResult getById(@PathVariable Long id) {
-        return matchService.getById(id);
+    @GetMapping("/student/{id}")
+    public List<MatchResult> getMatches(@PathVariable Long id) {
+        return service.getMatchesForStudent(id);
     }
 }

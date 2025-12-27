@@ -1,10 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.MatchResult;
-import com.example.demo.model.StudentProfile;
 import com.example.demo.repository.MatchResultRepository;
-import com.example.demo.repository.StudentProfileRepository;
 import com.example.demo.service.MatchService;
 import org.springframework.stereotype.Service;
 
@@ -13,40 +10,23 @@ import java.util.List;
 @Service
 public class MatchServiceImpl implements MatchService {
 
-    private final MatchResultRepository matchRepo;
-    private final StudentProfileRepository studentRepo;
+    private final MatchResultRepository repo;
 
-    public MatchServiceImpl(MatchResultRepository matchRepo,
-                            StudentProfileRepository studentRepo) {
-        this.matchRepo = matchRepo;
-        this.studentRepo = studentRepo;
+    public MatchServiceImpl(MatchResultRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public MatchResult compute(Long studentAId, Long studentBId) {
-
-        StudentProfile a = studentRepo.findById(studentAId)
-                .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
-
-        StudentProfile b = studentRepo.findById(studentBId)
-                .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
-
+    public MatchResult computeMatch(Long a, Long b) {
         MatchResult result = new MatchResult();
-        result.setStudentA(a);
-        result.setStudentB(b);
-        result.setScore(80.0);
-
-        return matchRepo.save(result);
+        result.setStudentAId(a);
+        result.setStudentBId(b);
+        result.setScore(75.0);
+        return repo.save(result);
     }
 
     @Override
-    public List<MatchResult> getForStudent(Long studentId) {
-        return matchRepo.findByStudentAIdOrStudentBIdOrderByScoreDesc(studentId, studentId);
-    }
-
-    @Override
-    public MatchResult getById(Long id) {
-        return matchRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Match not found"));
+    public List<MatchResult> getMatchesForStudent(Long studentId) {
+        return repo.findByStudentAIdOrStudentBId(studentId, studentId);
     }
 }
