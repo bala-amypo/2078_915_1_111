@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface MatchResultRepository extends JpaRepository<MatchResult, Long> {
 
-    List<MatchResult> findByStudentAIdOrStudentBIdOrderByScoreDesc(Long studentAId, Long studentBId);
-
+    List<MatchResult> findByStudentAIdOrStudentBId(Long a, Long b);
 }
