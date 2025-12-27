@@ -1,42 +1,37 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.StudentProfileDto;
 import com.example.demo.model.StudentProfile;
 import com.example.demo.service.StudentProfileService;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/students")
 public class StudentProfileController {
+    private final StudentProfileService service;
 
-    private final StudentProfileService studentService;
-
-    public StudentProfileController(StudentProfileService studentService) {
-        this.studentService = studentService;
+    public StudentProfileController(StudentProfileService service) {
+        this.service = service;
     }
 
-    @PostMapping("/{userId}")
-    public StudentProfile create(@RequestBody StudentProfileDto dto,
-                                 @PathVariable Long userId) {
-        return studentService.create(dto, userId);
-    }
-
-    @PutMapping("/{id}")
-    public StudentProfile update(@PathVariable Long id,
-                                 @RequestBody StudentProfileDto dto) {
-        return studentService.update(id, dto);
+    @PostMapping
+    public ResponseEntity<StudentProfile> create(@RequestBody StudentProfile student) {
+        return ResponseEntity.ok(service.createStudent(student));
     }
 
     @GetMapping("/{id}")
-    public StudentProfile get(@PathVariable Long id) {
-        return studentService.get(id);
+    public ResponseEntity<StudentProfile> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getStudentById(id));
     }
 
     @GetMapping
-    public List<StudentProfile> getAll() {
-        return studentService.getAll();
+    public ResponseEntity<List<StudentProfile>> getAll() {
+        return ResponseEntity.ok(service.getAllStudents());
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<StudentProfile> updateStatus(@PathVariable Long id, @RequestParam Boolean active) {
+        return ResponseEntity.ok(service.updateStudentStatus(id, active));
     }
 }
