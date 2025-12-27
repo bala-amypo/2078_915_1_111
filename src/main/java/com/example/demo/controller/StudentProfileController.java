@@ -1,14 +1,16 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.StudentProfileDto;
 import com.example.demo.model.StudentProfile;
 import com.example.demo.service.StudentProfileService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/students")
 public class StudentProfileController {
+
     private final StudentProfileService service;
 
     public StudentProfileController(StudentProfileService service) {
@@ -16,22 +18,23 @@ public class StudentProfileController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentProfile> create(@RequestBody StudentProfile student) {
-        return ResponseEntity.ok(service.createStudent(student));
+    public StudentProfile create(@RequestBody StudentProfileDto dto) {
+        return service.createStudent(dto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentProfile> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getStudentById(id));
+    public StudentProfile getById(@PathVariable Long id) {
+        return service.getStudentById(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentProfile>> getAll() {
-        return ResponseEntity.ok(service.getAllStudents());
+    public List<StudentProfile> getAll() {
+        return service.getAllStudents();
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<StudentProfile> updateStatus(@PathVariable Long id, @RequestParam Boolean active) {
-        return ResponseEntity.ok(service.updateStudentStatus(id, active));
+    public StudentProfile updateStatus(@PathVariable Long id,
+                                       @RequestParam Boolean active) {
+        return service.updateStudentStatus(id, active);
     }
 }

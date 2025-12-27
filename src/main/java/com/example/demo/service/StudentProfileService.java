@@ -7,7 +7,11 @@ import java.util.List;
 
 public interface StudentProfileService {
 
-    StudentProfile create(StudentProfileDto dto, Long userId);
+    StudentProfile createStudent(StudentProfileDto dto);
 
-    List<StudentProfile> getAll();
+    StudentProfile getStudentById(Long id);
+
+    List<StudentProfile> getAllStudents();
+
+    StudentProfile updateStudentStatus(Long id, Boolean active);
 }
