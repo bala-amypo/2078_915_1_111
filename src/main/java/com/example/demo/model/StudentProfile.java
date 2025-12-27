@@ -14,18 +14,19 @@ public class StudentProfile {
     private int age;
     private boolean active;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // ---- REQUIRED ----
+    public boolean isActive() {
+        return active;
+    }
 
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+    // ---- REQUIRED (for RoomAssignmentServiceImpl) ----
+    public boolean getActive() {
+        return active;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
-
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    // other getters/setters
 }
