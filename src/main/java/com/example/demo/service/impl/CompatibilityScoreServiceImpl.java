@@ -1,49 +1,93 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.AuthRequest;
-import com.example.demo.dto.AuthResponse;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.model.UserAccount;
-import com.example.demo.repository.UserAccountRepository;
-import com.example.demo.service.AuthService;
+import com.example.demo.model.CompatibilityScoreRecord;
+import com.example.demo.model.HabitProfile;
+import com.example.demo.repository.CompatibilityScoreRecordRepository;
+import com.example.demo.repository.HabitProfileRepository;
+import com.example.demo.service.CompatibilityScoreService;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class AuthServiceImpl implements AuthService {
+public class CompatibilityScoreServiceImpl implements CompatibilityScoreService {
+    private final CompatibilityScoreRecordRepository repository;
+    private final HabitProfileRepository habitRepository;
 
-    private final UserAccountRepository userRepo;
-
-    public AuthServiceImpl(UserAccountRepository userRepo) {
-        this.userRepo = userRepo;
+    public CompatibilityScoreServiceImpl(CompatibilityScoreRecordRepository repository, 
+                                       HabitProfileRepository habitRepository) {
+        this.repository = repository;
+        this.habitRepository = habitRepository;
     }
 
     @Override
-    public AuthResponse register(AuthRequest request) {
-
-        if (userRepo.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("User already exists");
+    public CompatibilityScoreRecord computeScore(Long studentAId, Long studentBId) {
+        if (studentAId.equals(studentBId)) {
+            throw new IllegalArgumentException("Cannot compute score for same student");
         }
 
-        UserAccount user = new UserAccount();
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        user.setRole("USER");
+        HabitProfile habitA = habitRepository.findByStudentId(studentAId)
+            .orElseThrow(() -> new RuntimeException("Habit profile not found"));
+        HabitProfile habitB = habitRepository.findByStudentId(studentBId)
+            .orElseThrow(() -> new RuntimeException("Habit profile not found"));
 
-        userRepo.save(user);
+        double score = calculateCompatibilityScore(habitA, habitB);
+        
+        Optional<CompatibilityScoreRecord> existing = repository.findByStudentAIdAndStudentBId(studentAId, studentBId);
+        CompatibilityScoreRecord record;
+        
+        if (existing.isPresent()) {
+            record = existing.get();
+            record.setScore(score);
+            record.setComputedAt(LocalDateTime.now());
+        } else {
+            record = new CompatibilityScoreRecord();
+            record.setStudentAId(studentAId);
+            record.setStudentBId(studentBId);
+            record.setScore(score);
+        }
+        
+        return repository.save(record);
+    }
 
-        return new AuthResponse(null, user.getId(), user.getEmail(), user.getRole());
+    private double calculateCompatibilityScore(HabitProfile a, HabitProfile b) {
+        double score = 0;
+        int factors = 0;
+
+        if (a.getSleepSchedule() != null && b.getSleepSchedule() != null) {
+            score += a.getSleepSchedule() == b.getSleepSchedule() ? 25 : 0;
+            factors++;
+        }
+        if (a.getCleanlinessLevel() != null && b.getCleanlinessLevel() != null) {
+            score += a.getCleanlinessLevel() == b.getCleanlinessLevel() ? 25 : 0;
+            factors++;
+        }
+        if (a.getNoiseTolerance() != null && b.getNoiseTolerance() != null) {
+            score += a.getNoiseTolerance() == b.getNoiseTolerance() ? 25 : 0;
+            factors++;
+        }
+        if (a.getSocialPreference() != null && b.getSocialPreference() != null) {
+            score += a.getSocialPreference() == b.getSocialPreference() ? 25 : 0;
+            factors++;
+        }
+
+        return factors > 0 ? score : 50.0;
     }
 
     @Override
-    public AuthResponse login(AuthRequest request) {
+    public CompatibilityScoreRecord getScoreById(Long id) {
+        return repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Score not found"));
+    }
 
-        UserAccount user = userRepo.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    @Override
+    public List<CompatibilityScoreRecord> getScoresForStudent(Long studentId) {
+        return repository.findByStudentAIdOrStudentBId(studentId, studentId);
+    }
 
-        if (!user.getPassword().equals(request.getPassword())) {
-            throw new IllegalArgumentException("Invalid credentials");
-        }
-
-        return new AuthResponse(null, user.getId(), user.getEmail(), user.getRole());
+    @Override
+    public List<CompatibilityScoreRecord> getAllScores() {
+        return repository.findAll();
     }
 }
