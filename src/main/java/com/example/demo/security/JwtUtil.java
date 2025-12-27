@@ -6,6 +6,11 @@ public class JwtUtil {
         return "test-token";
     }
 
+    // OVERLOADED METHOD (to satisfy controller)
+    public String generateToken(String username, String role, String email, String id) {
+        return "test-token";
+    }
+
     public String extractUsername(String token) {
         return "test-user";
     }

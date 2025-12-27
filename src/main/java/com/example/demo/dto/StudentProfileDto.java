@@ -2,43 +2,31 @@ package com.example.demo.dto;
 
 public class StudentProfileDto {
 
-    private String name;
+    private String fullName;
+    private String email;
     private int age;
-    private String gender;
-    private String roomTypePreference;
 
-    public StudentProfileDto() {
+    public String getFullName() {
+        return fullName;
     }
 
-    public String getName() {
-        return name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getAge() {
         return age;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public String getRoomTypePreference() {
-        return roomTypePreference;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public void setRoomTypePreference(String roomTypePreference) {
-        this.roomTypePreference = roomTypePreference;
     }
 }
