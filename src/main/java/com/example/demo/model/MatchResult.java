@@ -9,17 +9,19 @@ public class MatchResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private StudentProfile studentA;
+    private Long studentAId;
+    private Long studentBId;
+    private Double score;
 
-    @ManyToOne
-    private StudentProfile studentB;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    private double score;
+    public Long getStudentAId() { return studentAId; }
+    public void setStudentAId(Long studentAId) { this.studentAId = studentAId; }
 
-    public void setStudentA(StudentProfile studentA) { this.studentA = studentA; }
-    public void setStudentB(StudentProfile studentB) { this.studentB = studentB; }
-    public void setScore(double score) { this.score = score; }
+    public Long getStudentBId() { return studentBId; }
+    public void setStudentBId(Long studentBId) { this.studentBId = studentBId; }
 
-    public double getScore() { return score; }
+    public Double getScore() { return score; }
+    public void setScore(Double score) { this.score = score; }
 }
