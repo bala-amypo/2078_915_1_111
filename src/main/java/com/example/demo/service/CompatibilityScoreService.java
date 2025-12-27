@@ -1,11 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.AuthRequest;
-import com.example.demo.dto.AuthResponse;
+import com.example.demo.model.CompatibilityScoreRecord;
+import java.util.List;
 
-public interface AuthService {
-
-    AuthResponse register(AuthRequest request);
-
-    AuthResponse login(AuthRequest request);
+public interface CompatibilityScoreService {
+    CompatibilityScoreRecord computeScore(Long studentAId, Long studentBId);
+    CompatibilityScoreRecord getScoreById(Long id);
+    List<CompatibilityScoreRecord> getScoresForStudent(Long studentId);
+    List<CompatibilityScoreRecord> getAllScores();
 }
