@@ -12,48 +12,49 @@ import java.util.List;
 @Service
 public class RoomAssignmentServiceImpl implements RoomAssignmentService {
 
-    private final RoomAssignmentRecordRepository assignmentRepository;
-    private final StudentProfileRepository studentRepository;
+    private final RoomAssignmentRecordRepository repository;
+    private final StudentProfileRepository studentRepo;
 
-    public RoomAssignmentServiceImpl(RoomAssignmentRecordRepository assignmentRepository,
-                                     StudentProfileRepository studentRepository) {
-        this.assignmentRepository = assignmentRepository;
-        this.studentRepository = studentRepository;
+    public RoomAssignmentServiceImpl(RoomAssignmentRecordRepository repository,
+                                     StudentProfileRepository studentRepo) {
+        this.repository = repository;
+        this.studentRepo = studentRepo;
     }
 
     @Override
-    public RoomAssignmentRecord assignRoom(Long studentAId, Long studentBId) {
+    public RoomAssignmentRecord assignRoom(RoomAssignmentRecord record) {
 
-        StudentProfile studentA = studentRepository.findById(studentAId)
+        StudentProfile studentA = studentRepo.findById(record.getStudentAId())
                 .orElseThrow(() -> new RuntimeException("Student A not found"));
 
-        StudentProfile studentB = studentRepository.findById(studentBId)
+        StudentProfile studentB = studentRepo.findById(record.getStudentBId())
                 .orElseThrow(() -> new RuntimeException("Student B not found"));
 
-        RoomAssignmentRecord record =
-                new RoomAssignmentRecord(studentA.getStudentId(), studentB.getStudentId());
+        if (!studentA.isActive() || !studentB.isActive()) {
+            throw new RuntimeException("Both students must be active");
+        }
 
-        return assignmentRepository.save(record);
+        return repository.save(record);
     }
 
     @Override
-    public List<RoomAssignmentRecord> getAllAssignments() {
-        return assignmentRepository.findAll();
+    public List<RoomAssignmentRecord> getAssignments() {
+        return repository.findAll();
     }
 
     @Override
     public List<RoomAssignmentRecord> getAssignmentsByStudent(Long studentId) {
-        return assignmentRepository.findByStudentAIdOrStudentBId(studentId, studentId);
+        return repository.findByStudentAIdOrStudentBId(studentId, studentId);
     }
 
     @Override
     public RoomAssignmentRecord getAssignmentById(Long id) {
-        return assignmentRepository.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Assignment not found"));
     }
 
     @Override
     public void deleteAssignment(Long id) {
-        assignmentRepository.deleteById(id);
+        repository.deleteById(id);
     }
 }

@@ -5,18 +5,13 @@ import java.util.List;
 
 public interface RoomAssignmentService {
 
-    // Create or save assignment
     RoomAssignmentRecord assignRoom(RoomAssignmentRecord record);
 
-    // Get assignment by ID
-    RoomAssignmentRecord getAssignmentById(Long id);
+    List<RoomAssignmentRecord> getAssignments();
 
-    // Get all assignments
-    List<RoomAssignmentRecord> getAllAssignments();
-
-    // Get assignments for a specific student
     List<RoomAssignmentRecord> getAssignmentsByStudent(Long studentId);
 
-    // Delete assignment
+    RoomAssignmentRecord getAssignmentById(Long id);
+
     void deleteAssignment(Long id);
 }
