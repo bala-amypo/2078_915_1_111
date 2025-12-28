@@ -8,16 +8,17 @@ public class StudentProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long studentId;
 
     private String fullName;
+
     private String email;
+
     private int age;
 
     private boolean active = true;
 
-    public StudentProfile() {
-    }
+    public StudentProfile() {}
 
     public StudentProfile(String fullName, String email, int age) {
         this.fullName = fullName;
@@ -26,8 +27,12 @@ public class StudentProfile {
         this.active = true;
     }
 
-    public Long getId() {
-        return id;
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 
     public String getFullName() {
@@ -54,7 +59,7 @@ public class StudentProfile {
         this.age = age;
     }
 
-    public boolean getActive() {
+    public boolean isActive() {
         return active;
     }
 
