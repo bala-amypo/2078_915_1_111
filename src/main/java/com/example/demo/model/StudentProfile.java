@@ -1,27 +1,33 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "student_profiles")
 public class StudentProfile {
 
     @Id
-    private String studentId;   // ✅ REQUIRED for repository query
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String fullName;
     private String email;
     private int age;
+
     private boolean active = true;
 
-    // ---- getters & setters ----
-
-    public String getStudentId() {
-        return studentId;
+    public StudentProfile() {
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public StudentProfile(String fullName, String email, int age) {
+        this.fullName = fullName;
+        this.email = email;
+        this.age = age;
+        this.active = true;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getFullName() {
