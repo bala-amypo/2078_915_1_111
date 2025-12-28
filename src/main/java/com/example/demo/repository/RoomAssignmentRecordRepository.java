@@ -1,11 +1,7 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.RoomAssignmentRecord;
+import com.example.demo.model.RoomAssignment;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import java.util.List;
 
-@Repository
-public interface RoomAssignmentRecordRepository extends JpaRepository<RoomAssignmentRecord, Long> {
-    List<RoomAssignmentRecord> findByStudentAIdOrStudentBId(Long studentAId, Long studentBId);
+public interface RoomAssignmentRepository extends JpaRepository<RoomAssignment, Long> {
 }

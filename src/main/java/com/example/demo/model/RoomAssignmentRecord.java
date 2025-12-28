@@ -1,41 +1,43 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "room_assignment_records")
-public class RoomAssignmentRecord {
+public class RoomAssignment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
+    private String studentAId;
+    private String studentBId;
     private String roomNumber;
-    private Long studentAId;
-    private Long studentBId;
-    
-    @Enumerated(EnumType.STRING)
-    private Status status = Status.ACTIVE;
-    
-    private LocalDateTime assignedAt = LocalDateTime.now();
 
-    public enum Status { ACTIVE, COMPLETED, CANCELLED }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    
-    public String getRoomNumber() { return roomNumber; }
-    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
-    
-    public Long getStudentAId() { return studentAId; }
-    public void setStudentAId(Long studentAId) { this.studentAId = studentAId; }
-    
-    public Long getStudentBId() { return studentBId; }
-    public void setStudentBId(Long studentBId) { this.studentBId = studentBId; }
-    
-    public Status getStatus() { return status; }
-    public void setStatus(Status status) { this.status = status; }
-    
-    public LocalDateTime getAssignedAt() { return assignedAt; }
-    public void setAssignedAt(LocalDateTime assignedAt) { this.assignedAt = assignedAt; }
+    public String getStudentAId() {
+        return studentAId;
+    }
+
+    public void setStudentAId(String studentAId) {
+        this.studentAId = studentAId;
+    }
+
+    public String getStudentBId() {
+        return studentBId;
+    }
+
+    public void setStudentBId(String studentBId) {
+        this.studentBId = studentBId;
+    }
+
+    public String getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
 }
