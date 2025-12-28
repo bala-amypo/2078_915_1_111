@@ -1,18 +1,24 @@
-package com.example.demo.controller;
+package com.example.demo.dto;
 
-import org.springframework.web.bind.annotation.*;
-
-@RestController
-@RequestMapping("/api/auth")
-public class AuthController {
-
-    @PostMapping("/login")
-    public void login() {
-        // method definition only
-    }
-
-    @PostMapping("/register")
-    public void register() {
-        // method definition only
-    }
+public class AuthRequest {
+    private String username;
+    private String password;
+    private String email;
+    private String role;
+    
+    // Constructors
+    public AuthRequest() {}
+    
+    // Getters and Setters
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+    
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }
