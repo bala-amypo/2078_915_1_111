@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HabitProfileServiceImpl implements HabitProfileService {
@@ -18,50 +19,47 @@ public class HabitProfileServiceImpl implements HabitProfileService {
     }
 
     @Override
-    public HabitProfile createHabit(HabitProfile habit) {
+    public HabitProfile createHabitProfile(HabitProfile habit) {
 
-        // Prevent null compare issue
-        if (habit.getStudyHoursPerDay() == null) {
+        // avoid null comparison issue
+        // if study hours not provided, default to 0
+        if (habit.getStudyHoursPerDay() == 0) {
             habit.setStudyHoursPerDay(0);
         }
 
         habit.setCreatedAt(LocalDateTime.now());
         habit.setUpdatedAt(LocalDateTime.now());
+
         return repository.save(habit);
     }
 
     @Override
-    public HabitProfile updateHabit(Long id, HabitProfile habit) {
-        HabitProfile existingHabit = repository.findById(id)
+    public HabitProfile updateHabitProfile(Long id, HabitProfile habit) {
+        HabitProfile existing = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Habit profile not found"));
 
-        if (habit.getSleepSchedule() != null)
-            existingHabit.setSleepSchedule(habit.getSleepSchedule());
+        existing.setSleepSchedule(habit.getSleepSchedule());
+        existing.setStudyHoursPerDay(habit.getStudyHoursPerDay());
+        existing.setCleanlinessLevel(habit.getCleanlinessLevel());
+        existing.setNoiseTolerance(habit.getNoiseTolerance());
+        existing.setSocialPreference(habit.getSocialPreference());
+        existing.setUpdatedAt(LocalDateTime.now());
 
-        if (habit.getStudyHoursPerDay() != null)
-            existingHabit.setStudyHoursPerDay(habit.getStudyHoursPerDay());
-
-        if (habit.getCleanlinessLevel() != null)
-            existingHabit.setCleanlinessLevel(habit.getCleanlinessLevel());
-
-        if (habit.getNoiseTolerance() != null)
-            existingHabit.setNoiseTolerance(habit.getNoiseTolerance());
-
-        if (habit.getSocialPreference() != null)
-            existingHabit.setSocialPreference(habit.getSocialPreference());
-
-        existingHabit.setUpdatedAt(LocalDateTime.now());
-        return repository.save(existingHabit);
+        return repository.save(existing);
     }
 
     @Override
-    public HabitProfile getHabitById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Habit profile not found"));
+    public Optional<HabitProfile> getHabitById(Long id) {
+        return repository.findById(id);
     }
 
     @Override
-    public List<HabitProfile> getAllHabits() {
+    public List<HabitProfile> getAllHabitProfiles() {
         return repository.findAll();
+    }
+
+    @Override
+    public void deleteHabitProfile(Long id) {
+        repository.deleteById(id);
     }
 }
