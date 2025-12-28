@@ -22,7 +22,7 @@ public class SwaggerConfig {
                 .description("API for managing hostel roommate compatibility matching")
                 .version("1.0"))
             .servers(Arrays.asList(
-                new Server().url("https://9246.408procr.amypo.ai/").description("Production Server")
+                new Server().url("https://9092.408procr.amypo.ai/").description("Production Server")
             ))
             .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
             .components(new Components()
