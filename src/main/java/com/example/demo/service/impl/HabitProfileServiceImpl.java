@@ -11,45 +11,34 @@ import java.util.Optional;
 @Service
 public class HabitProfileServiceImpl implements HabitProfileService {
 
-    private final HabitProfileRepository habitProfileRepository;
+    private final HabitProfileRepository habitRepo;
 
-    public HabitProfileServiceImpl(HabitProfileRepository habitProfileRepository) {
-        this.habitProfileRepository = habitProfileRepository;
+    public HabitProfileServiceImpl(HabitProfileRepository habitRepo) {
+        this.habitRepo = habitRepo;
     }
 
     @Override
     public HabitProfile createOrUpdateHabit(HabitProfile habit) {
-
-        // If student already has a habit profile → update instead of new insert
-        Optional<HabitProfile> existing = habitProfileRepository.findByStudentId(habit.getStudentId());
-
-        if (existing.isPresent()) {
-            HabitProfile dbHabit = existing.get();
-
-            dbHabit.setSleepSchedule(habit.getSleepSchedule());
-            dbHabit.setStudyHoursPerDay(habit.getStudyHoursPerDay());
-            dbHabit.setCleanlinessLevel(habit.getCleanlinessLevel());
-            dbHabit.setNoiseTolerance(habit.getNoiseTolerance());
-            dbHabit.setSocialPreference(habit.getSocialPreference());
-
-            return habitProfileRepository.save(dbHabit);
-        }
-
-        return habitProfileRepository.save(habit);
-    }
-
-    @Override
-    public Optional<HabitProfile> getHabitByStudent(Long studentId) {
-        return habitProfileRepository.findByStudentId(studentId);
+        return habitRepo.save(habit);
     }
 
     @Override
     public List<HabitProfile> getAllHabitProfiles() {
-        return habitProfileRepository.findAll();
+        return habitRepo.findAll();
+    }
+
+    @Override
+    public Optional<HabitProfile> getHabitById(Long id) {
+        return habitRepo.findById(id);
+    }
+
+    @Override
+    public Optional<HabitProfile> getHabitByStudent(Long studentId) {
+        return habitRepo.findByStudentId(studentId);
     }
 
     @Override
     public void deleteHabit(Long id) {
-        habitProfileRepository.deleteById(id);
+        habitRepo.deleteById(id);
     }
 }
