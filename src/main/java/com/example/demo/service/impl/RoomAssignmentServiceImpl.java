@@ -7,44 +7,56 @@ import com.example.demo.repository.StudentProfileRepository;
 import com.example.demo.service.RoomAssignmentService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class RoomAssignmentServiceImpl implements RoomAssignmentService {
 
-
-    private final RoomAssignmentRecordRepository roomRepo;
+    private final RoomAssignmentRecordRepository repository;
     private final StudentProfileRepository studentRepo;
 
-    public RoomAssignmentServiceImpl(RoomAssignmentRecordRepository roomRepo,
+    public RoomAssignmentServiceImpl(RoomAssignmentRecordRepository repository,
                                      StudentProfileRepository studentRepo) {
-        this.roomRepo = roomRepo;
+        this.repository = repository;
         this.studentRepo = studentRepo;
     }
 
     @Override
-    public RoomAssignment assignRoom(Long studentAId, Long studentBId) {
+    public RoomAssignmentRecord assignRoom(RoomAssignmentRecord record) {
+        return repository.save(record);
+    }
 
-        StudentProfile studentA = studentRepo.findById(studentAId)
-                .orElseThrow(() -> new ResourceNotFoundException("Student A not found"));
+    @Override
+    public RoomAssignmentRecord getAssignmentById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
 
-        StudentProfile studentB = studentRepo.findById(studentBId)
-                .orElseThrow(() -> new ResourceNotFoundException("Student B not found"));
+    @Override
+    public List<RoomAssignmentRecord> getAllAssignments() {
+        return repository.findAll();
+    }
 
-        // ensure only active students can be assigned
-        if (!studentA.getActive() || !studentB.getActive()) {
-            throw new IllegalStateException("Both students must be active to assign room");
-        }
+    @Override
+    public List<RoomAssignmentRecord> getAssignmentsByStudent(Long studentId) {
+        return repository.findByStudentAIdOrStudentBId(studentId, studentId);
+    }
 
-        RoomAssignment assignment = new RoomAssignment();
+    @Override
+    public void deleteAssignment(Long id) {
+        repository.deleteById(id);
+    }
 
-        // IMPORTANT FIX – convert Long → String
-        assignment.setStudentAId(String.valueOf(studentA.getId()));
-        assignment.setStudentBId(String.valueOf(studentB.getId()));
+    @Override
+    public RoomAssignmentRecord createPair(Long studentAId, Long studentBId, String roomNumber) {
 
-        assignment.setRoomNumber("R-" + studentA.getId() + "-" + studentB.getId());
+        StudentProfile studentA = studentRepo.findById(studentAId).orElseThrow();
+        StudentProfile studentB = studentRepo.findById(studentBId).orElseThrow();
 
-        return roomRepo.save(assignment);
+        RoomAssignmentRecord record = new RoomAssignmentRecord();
+        record.setStudentAId(studentAId);
+        record.setStudentBId(studentBId);
+        record.setRoomNumber(roomNumber);
+
+        return repository.save(record);
     }
 }
