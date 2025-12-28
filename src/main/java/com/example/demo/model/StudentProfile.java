@@ -1,62 +1,55 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
 public class StudentProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String studentId;   // ✅ REQUIRED for repository query
 
     private String fullName;
     private String email;
     private int age;
-    private boolean active;
+    private boolean active = true;
 
-    /* ================= GETTERS ================= */
+    // ---- getters & setters ----
 
-    public Long getId() {
-        return id;
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public String getFullName() {
         return fullName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    // Required by RoomAssignmentServiceImpl
-    public boolean getActive() {
-        return active;
-    }
-
-    /* ================= SETTERS ================= */
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
+    public int getAge() {
+        return age;
+    }
+
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public boolean getActive() {
+        return active;
     }
 
     public void setActive(boolean active) {
