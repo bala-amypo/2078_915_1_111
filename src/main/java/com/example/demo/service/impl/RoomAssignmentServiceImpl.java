@@ -14,10 +14,10 @@ import java.util.List;
 public class RoomAssignmentServiceImpl implements RoomAssignmentService {
 
 
-    private final RoomAssignmentRepository roomRepo;
+    private final RoomAssignmentRecordRepository roomRepo;
     private final StudentProfileRepository studentRepo;
 
-    public RoomAssignmentServiceImpl(RoomAssignmentRepository roomRepo,
+    public RoomAssignmentServiceImpl(RoomAssignmentRecordRepository roomRepo,
                                      StudentProfileRepository studentRepo) {
         this.roomRepo = roomRepo;
         this.studentRepo = studentRepo;
