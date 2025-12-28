@@ -1,39 +1,47 @@
 package com.example.demo.security;
 
-import java.util.Date;
-
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import java.security.Key;
+import java.util.Date;
 
 @Component
 public class JwtUtil {
-
-    private static final String SECRET_KEY = "demo_secret_key";
-
-    public String generateToken(String username) {
+    
+    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final long expiration = 86400000; // 24 hours
+    
+    public String generateToken(String username, String role, String email, String studentId) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 3600000))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
+            .setSubject(username)
+            .claim("role", role)
+            .claim("email", email)
+            .claim("studentId", studentId)
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + expiration))
+            .signWith(key)
+            .compact();
     }
-
+    
+    public Claims extractClaims(String token) {
+        return Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+    }
+    
     public String extractUsername(String token) {
-        return getClaims(token).getSubject();
+        return extractClaims(token).getSubject();
     }
-
-    public boolean validateToken(String token) {
-        return !getClaims(token).getExpiration().before(new Date());
-    }
-
-    private Claims getClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
+    
+    public boolean validate(String token) {
+        try {
+            extractClaims(token);
+            return true;
+        } catch (JwtException e) {
+            throw new RuntimeException("Invalid token");
+        }
     }
 }
