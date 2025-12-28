@@ -18,25 +18,21 @@ public class HabitProfileServiceImpl implements HabitProfileService {
         this.repository = repository;
     }
 
+    // CREATE or SAVE
     @Override
-    public HabitProfile createHabitProfile(HabitProfile habit) {
+    public HabitProfile saveHabit(HabitProfile habit) {
 
-        // avoid null comparison issue
-        // if study hours not provided, default to 0
-        if (habit.getStudyHoursPerDay() == 0) {
-            habit.setStudyHoursPerDay(0);
-        }
-
-        habit.setCreatedAt(LocalDateTime.now());
+        // If entity already has timestamps, do not force setCreatedAt() (it caused errors earlier)
         habit.setUpdatedAt(LocalDateTime.now());
 
         return repository.save(habit);
     }
 
+    // UPDATE
     @Override
-    public HabitProfile updateHabitProfile(Long id, HabitProfile habit) {
+    public HabitProfile updateHabit(Long id, HabitProfile habit) {
         HabitProfile existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Habit profile not found"));
+                .orElseThrow(() -> new RuntimeException("Habit not found"));
 
         existing.setSleepSchedule(habit.getSleepSchedule());
         existing.setStudyHoursPerDay(habit.getStudyHoursPerDay());
@@ -48,18 +44,27 @@ public class HabitProfileServiceImpl implements HabitProfileService {
         return repository.save(existing);
     }
 
+    // GET BY ID
     @Override
     public Optional<HabitProfile> getHabitById(Long id) {
         return repository.findById(id);
     }
 
+    // GET BY STUDENT
+    @Override
+    public Optional<HabitProfile> getHabitByStudent(Long studentId) {
+        return repository.findByStudentId(studentId);
+    }
+
+    // GET ALL
     @Override
     public List<HabitProfile> getAllHabitProfiles() {
         return repository.findAll();
     }
 
+    // DELETE
     @Override
-    public void deleteHabitProfile(Long id) {
+    public void deleteHabit(Long id) {
         repository.deleteById(id);
     }
 }
