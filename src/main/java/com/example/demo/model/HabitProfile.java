@@ -7,21 +7,34 @@ import java.time.LocalDateTime;
 @Table(name = "habit_profiles")
 public class HabitProfile {
 
-    public enum SleepSchedule { EARLY, NORMAL, LATE }
-    public enum CleanlinessLevel { LOW, MEDIUM, HIGH }
-    public enum NoiseTolerance { LOW, MEDIUM, HIGH }
-    public enum SocialPreference { INTROVERT, BALANCED, EXTROVERT }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long studentId;
 
+    public enum SleepSchedule {
+        EARLY,
+        LATE,
+        REGULAR   // <-- REQUIRED BY TESTS
+    }
+
+    public enum CleanlinessLevel {
+        LOW, MEDIUM, HIGH
+    }
+
+    public enum NoiseTolerance {
+        LOW, MEDIUM, HIGH
+    }
+
+    public enum SocialPreference {
+        INTROVERT, EXTROVERT, BALANCED
+    }
+
     @Enumerated(EnumType.STRING)
     private SleepSchedule sleepSchedule;
 
-    private int studyHoursPerDay;
+    private Integer studyHoursPerDay;   // must be Integer not int
 
     @Enumerated(EnumType.STRING)
     private CleanlinessLevel cleanlinessLevel;
@@ -37,8 +50,9 @@ public class HabitProfile {
 
     public HabitProfile() {}
 
-    // ===== GETTERS & SETTERS =====
+    // ---------- GETTERS / SETTERS ----------
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }   // <-- REQUIRED BY TESTS
 
     public Long getStudentId() { return studentId; }
     public void setStudentId(Long studentId) { this.studentId = studentId; }
@@ -46,8 +60,8 @@ public class HabitProfile {
     public SleepSchedule getSleepSchedule() { return sleepSchedule; }
     public void setSleepSchedule(SleepSchedule sleepSchedule) { this.sleepSchedule = sleepSchedule; }
 
-    public int getStudyHoursPerDay() { return studyHoursPerDay; }
-    public void setStudyHoursPerDay(int studyHoursPerDay) { this.studyHoursPerDay = studyHoursPerDay; }
+    public Integer getStudyHoursPerDay() { return studyHoursPerDay; }
+    public void setStudyHoursPerDay(Integer studyHoursPerDay) { this.studyHoursPerDay = studyHoursPerDay; }
 
     public CleanlinessLevel getCleanlinessLevel() { return cleanlinessLevel; }
     public void setCleanlinessLevel(CleanlinessLevel cleanlinessLevel) { this.cleanlinessLevel = cleanlinessLevel; }
@@ -59,6 +73,7 @@ public class HabitProfile {
     public void setSocialPreference(SocialPreference socialPreference) { this.socialPreference = socialPreference; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
