@@ -20,18 +20,21 @@ public class StudentProfileServiceImpl implements StudentProfileService {
 
     @Override
     public StudentProfile createStudent(StudentProfileDto dto) {
+
         StudentProfile profile = new StudentProfile();
         profile.setFullName(dto.getFullName());
         profile.setEmail(dto.getEmail());
         profile.setAge(dto.getAge());
         profile.setActive(true);
+
         return repo.save(profile);
     }
 
     @Override
     public StudentProfile getStudentById(Long id) {
         return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Student not found with id: " + id));
     }
 
     @Override
