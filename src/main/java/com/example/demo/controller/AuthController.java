@@ -1,24 +1,29 @@
-package com.example.demo.dto;
+package com.example.demo.controller;
 
-public class AuthRequest {
-    private String username;
-    private String password;
-    private String email;
-    private String role;
-    
-    // Constructors
-    public AuthRequest() {}
-    
-    // Getters and Setters
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-    
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+import com.example.demo.security.JwtUtil;
+import com.example.demo.dto.AuthRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    private final JwtUtil jwtUtil;
+
+    public AuthController(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody AuthRequest request) {
+        String token = jwtUtil.generateToken(request.getUsername());
+        return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody AuthRequest request) {
+        String token = jwtUtil.generateToken(request.getUsername());
+        return ResponseEntity.ok(token);
+    }
 }
