@@ -2,9 +2,21 @@ package com.example.demo.dto;
 
 public class StudentProfileDto {
 
+    private Long id;
     private String fullName;
     private String email;
     private int age;
+
+    public StudentProfileDto() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getFullName() {
         return fullName;

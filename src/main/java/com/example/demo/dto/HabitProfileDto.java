@@ -2,43 +2,34 @@ package com.example.demo.dto;
 
 public class HabitProfileDto {
 
-    private boolean smoking;
-    private boolean drinking;
-    private int cleanlinessLevel;
-    private int noisePreference;
+    private Long id;
+    private String habitName;
+    private String habitType;
 
     public HabitProfileDto() {
     }
 
-    public boolean isSmoking() {
-        return smoking;
+    public Long getId() {
+        return id;
     }
 
-    public boolean isDrinking() {
-        return drinking;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public int getCleanlinessLevel() {
-        return cleanlinessLevel;
+    public String getHabitName() {
+        return habitName;
     }
 
-    public int getNoisePreference() {
-        return noisePreference;
+    public void setHabitName(String habitName) {
+        this.habitName = habitName;
     }
 
-    public void setSmoking(boolean smoking) {
-        this.smoking = smoking;
+    public String getHabitType() {
+        return habitType;
     }
 
-    public void setDrinking(boolean drinking) {
-        this.drinking = drinking;
-    }
-
-    public void setCleanlinessLevel(int cleanlinessLevel) {
-        this.cleanlinessLevel = cleanlinessLevel;
-    }
-
-    public void setNoisePreference(int noisePreference) {
-        this.noisePreference = noisePreference;
+    public void setHabitType(String habitType) {
+        this.habitType = habitType;
     }
 }
