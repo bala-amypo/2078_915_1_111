@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.AuthRequest;
-import com.example.demo.security.JwtUtil;
+import com.example.demo.model.User;
+import com.example.demo.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,36 +11,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private AuthService authService;
 
-    public AuthController(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
-
+    // 🔐 LOGIN
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AuthRequest request) {
-
-        // JwtUtil requires 4 parameters (username, role, firstname, lastname)
-        String token = jwtUtil.generateToken(
-                request.getUsername(),
-                "USER",
-                "DEFAULT",
-                "USER"
-        );
-
-        return ResponseEntity.ok(token);
+        boolean success = authService.login(request.getUsername(), request.getPassword());
+        if (success) {
+            return ResponseEntity.ok("Login Successful");
+        }
+        return ResponseEntity.status(401).body("Invalid Credentials");
     }
 
+    // 👑 CREATE ADMIN
     @PostMapping("/admin")
-    public ResponseEntity<String> adminLogin(@RequestBody AuthRequest request) {
+    public ResponseEntity<String> createAdmin(@RequestBody AuthRequest request) {
+        authService.createUser(request, "ADMIN");
+        return ResponseEntity.ok("Admin Created Successfully");
+    }
 
-        String token = jwtUtil.generateToken(
-                request.getUsername(),
-                "ADMIN",
-                "ADMIN",
-                "USER"
-        );
-
-        return ResponseEntity.ok(token);
+    // 👨‍🎓 REGISTER NORMAL USER  (THIS FIXES YOUR TEST ERROR)
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody AuthRequest request) {
+        authService.createUser(request, "USER");
+        return ResponseEntity.ok("User Registered Successfully");
     }
 }
